@@ -206,3 +206,35 @@
 .canvas-container.loaded {
   opacity: 1;
 }
+
+/* Performance optimizations for animations */
+.optimized-animation {
+  will-change: transform;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .canvas-container {
+    opacity: 1;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .mobile-optimized-canvas {
+    max-height: 300px;
+  }
+
+  /* Reduce complexity on mobile */
+  .mobile-low-power {
+    --light-intensity: 0.3;
+    --shadow-enabled: false;
+  }
+}
