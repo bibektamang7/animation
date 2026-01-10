@@ -44,7 +44,7 @@ const HeroSection = ({ onModelLoaded }: { onModelLoaded?: () => void }) => {
 
   return (
     <section ref={heroRef} className="w-full h-screen section-container relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-surface/50" />
+      <div className="absolute inset-0 bg-linear-to-b from-background via-background to-surface/50" />
 
       <div className="absolute inset-0 pointer-events-none"
            style={{
@@ -92,7 +92,7 @@ const HeroSection = ({ onModelLoaded }: { onModelLoaded?: () => void }) => {
                 <button
                     className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium overflow-hidden btn-glow"
                 >
-                    <span className="relative z-10">Explore the Cases</span>
+                    <span className="relative z-10">Visit store</span>
                     <div
                     className="absolute inset-0 bg-linear-to-r from-gold-light to-gold-dark"
                     />
@@ -102,9 +102,8 @@ const HeroSection = ({ onModelLoaded }: { onModelLoaded?: () => void }) => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 z-50 transform -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2 text-muted-foreground">
           <span className="text-xs tracking-widest uppercase">Scroll</span>

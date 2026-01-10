@@ -15,31 +15,26 @@ interface ModelProps {
 const HeroModel = ({
   iPhonePath,
   scale = 3,
-  animationProgress = 1,
   onLoad,
 }: ModelProps) => {
   const groupRef = useRef<THREE.Group>(null);
-
-  // Load both models
   const { scene: iPhoneScene } = useGLTF(iPhonePath);
 
+  // Helper to convert degrees to radians
+  const degToRad = (deg: number) => deg * (Math.PI / 180);
+
   useEffect(() => {
-    if (onLoad) {
-      onLoad();
-    }
+    if (onLoad) onLoad();
   }, [onLoad]);
 
-  // useFrame((state) => {
-  //   if (groupRef.current && autoRotate) {
-  //     groupRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-  //   }
-  // });
-
   return (
-    <group ref={groupRef} scale={scale}  rotateY={145}>
-      {/* iPhone Model */}
-      <primitive object={iPhoneScene.clone()} position={[0, 0, 0]}  />
-
+    <group 
+      ref={groupRef} 
+      scale={scale} 
+      /* Rotate 145 degrees on Y axis */
+      rotation={[6, degToRad(80), 50]} 
+    >
+      <primitive object={iPhoneScene.clone()} position={[0, 0, 0]} />
     </group>
   );
 };
@@ -73,7 +68,7 @@ export const HeroModelScene = ({
   return (
     <div className={`${className}`}>
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
+        camera={{ position: [0, 0, 5.5], fov: 45 }}
         gl={{
           antialias: true,
           alpha: true,
