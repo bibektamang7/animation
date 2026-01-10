@@ -9,6 +9,7 @@ import Lifestyle from "./components/sections/Lifestyle";
 import TrustBrand from "./components/sections/TrustBrand";
 import FinalCTA from "./components/sections/FinalCTA";
 import { Suspense } from "react";
+import HeroReveal from "./components/HeroReveal";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,14 +23,15 @@ export default function Home() {
           </div>
         }
       >
-        <HeroSection />
+        <HeroReveal/>
+        {/* <HeroSection />
         <TransitionSection />
         <ProtectionStory />
         <DesignStyle />
         <FitPrecision />
         <Lifestyle />
         <TrustBrand />
-        <FinalCTA />
+        <FinalCTA /> */}
       </Suspense>
     </main>
   );

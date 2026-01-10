@@ -25,53 +25,6 @@ const HeroSection = () => {
   }, []);
 
   useGSAP(() => {
-    // Animation for content elements
-    gsap.fromTo(contentRef.current,
-      {
-        opacity: 0,
-        x: -50,
-        y: 20
-      },
-      {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: contentRef.current,
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Animation for the 3D model
-    gsap.fromTo(modelRef.current,
-      {
-        x: 100,
-        opacity: 0.7,
-        rotateY: -20,
-        scale: 0.8
-      },
-      {
-        x: 0,
-        opacity: 1,
-        rotateY: 0,
-        scale: 1,
-        duration: 1.5,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
     // Additional scroll animation for the model to move to the next section
     gsap.to(modelRef.current, {
       y: -200,
@@ -103,56 +56,50 @@ const HeroSection = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-primary/5 rounded-full blur-[100px]" />
 
       <div className="container h-screen mx-auto px-4 relative z-10">
-        <div className="h-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16">
-          <div ref={contentRef} className="flex-1 text-center lg:text-left">
-            <p
-              className="text-primary tracking-[0.3em] uppercase text-sm mb-4"
-            >
-              Covermandu
-            </p>
-
-            <h1
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight mb-6"
-            >
-              Designed to protect.
-              <br />
-              <span className="text-gradient font-medium">Styled to stand out.</span>
-            </h1>
-
-            <p
-              className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto lg:mx-0 mb-8"
-            >
-              Premium iPhone cases built for everyday life.
-            </p>
-
-            <div>
-              <button
-                className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium overflow-hidden btn-glow"
-              >
-                <span className="relative z-10">Explore the Cases</span>
-                <div
-                  className="absolute inset-0 bg-linear-to-r from-gold-light to-gold-dark"
-                />
-              </button>
+        <div className="h-full w-full flex items-center justify-center">
+            <div ref={modelRef} className="hero-model absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-full h-full max-w-lg flex items-center justify-center">
+                    <HeroModelScene
+                    iPhonePath="/models/iphone_16_pro_max.glb"
+                    scale={2.5}
+                    autoRotate={true}
+                    animationProgress={caseAnimationProgress}
+                    className="w-full h-full"
+                    />
+                </div>
             </div>
-          </div>
+            <div ref={contentRef} className="relative text-center z-10">
+                <p
+                className="hero-content-line text-primary tracking-[0.3em] uppercase text-sm mb-4"
+                >
+                Covermandu
+                </p>
 
-          <div
-            ref={modelRef}
-            className="absolute flex-1 w-full h-120 flex items-center justify-center"
-          >
-            <div className="w-full h-full max-w-lg flex items-center justify-center">
-              <div className="w-full h-full flex items-center justify-center">
-                <HeroModelScene
-                  iPhonePath="/models/iphone_16_pro_max.glb"
-                  scale={2.5}
-                  autoRotate={true}
-                  animationProgress={caseAnimationProgress}
-                  className="w-full h-full"
-                />
-              </div>
+                <h1
+                className="hero-content-line text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight mb-6"
+                >
+                Designed to protect.
+                <br />
+                <span className="text-gradient font-medium">Styled to stand out.</span>
+                </h1>
+
+                <p
+                className="hero-content-line text-lg md:text-xl text-muted-foreground max-w-md mx-auto mb-8"
+                >
+                Premium iPhone cases built for everyday life.
+                </p>
+
+                <div className="hero-content-line">
+                <button
+                    className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium overflow-hidden btn-glow"
+                >
+                    <span className="relative z-10">Explore the Cases</span>
+                    <div
+                    className="absolute inset-0 bg-linear-to-r from-gold-light to-gold-dark"
+                    />
+                </button>
+                </div>
             </div>
-          </div>
         </div>
       </div>
 
