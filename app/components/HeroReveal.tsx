@@ -11,59 +11,57 @@ if (typeof window !== "undefined") {
 export default function HeroReveal() {
   const containerRef = useRef(null);
   const [counter, setCounter] = useState(0);
+  const [isLoaderDone, setLoaderDone] = useState(false);
+  const [isModelReady, setModelReady] = useState(false);
 
+  // Loader timeline
   useEffect(() => {
     CustomEase.create("hop", "M0,0 C0.354,0 0.464,0.133 0.498,0.502 0.532,0.872 0.61,1 1,1");
+    const counterProxy = { value: 0 };
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "hop", duration: 1.5 }
-      });
+      const tl = gsap.timeline({ onComplete: () => setLoaderDone(true) });
 
-      // 1. DYNAMIC COUNTER ANIMATION
-      // We animate a proxy object to update the state from 0 to 100
-      const counterProxy = { value: 0 };
       tl.to(counterProxy, {
-        value: 100,
-        duration: 3,
-        ease: "none",
-        onUpdate: () => {
-          setCounter(Math.floor(counterProxy.value));
-        }
-      });
-
-      // 2. SLIDE THE COUNTER OUT AFTER 100%
-      tl.to(".counter-display", {
-        y: -100,
-        opacity: 0,
-        delay: 0.2,
-        duration: 0.8
-      });
-
-      // 3. REMAINING REVEAL ANIMATION (UPDATED)
-      tl.to(".spinner", { opacity: 0, duration: 0.5 }, "-=0.5")
+          value: 100,
+          duration: 3,
+          ease: "none",
+          onUpdate: () => setCounter(Math.floor(counterProxy.value)),
+        })
+        .to(".counter-display", { y: -100, opacity: 0, delay: 0.2, duration: 0.8 })
+        .to(".spinner", { opacity: 0, duration: 0.5 }, "-=0.5")
         .to(".intro-logo h1", { y: 0, stagger: 0.1 }, "-=0.2")
         .to(".divider", { scaleY: 1, duration: 1.5, ease: "power2.inOut" }, "-=0.5")
-        .to(".divider", { scaleY: 0, duration: 1.5, ease: "power2.out", delay: 0.5 })
-        .to(".intro-logo #word1", { y: 220 }, "reveal")
-        .to(".intro-logo #word2", { y: -220 }, "reveal")
-        .to(".overlay > .block:first-child", {
-          yPercent: -100,
-          duration: 1.5,
-          ease: "power2.inOut"
-        }, "reveal")
-        .to(".overlay > .block:last-child", {
-          yPercent: 100,
-          duration: 1.5,
-          ease: "power2.inOut"
-        }, "reveal")
-        .from(".hero-model", { scale: 0, opacity: 0, duration: 1.5, ease: 'power3.inOut' }, "reveal")
-        .from(".hero-content-line", { y: 20, opacity: 0, stagger: 0.2, duration: 1, ease: 'power3.out' }, "reveal+=0.5");
-
+        .to(".divider", { scaleY: 0, duration: 1.5, ease: "power2.out", delay: 0.5 });
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Reveal timeline
+  useEffect(() => {
+    if (isLoaderDone && isModelReady) {
+      const ctx = gsap.context(() => {
+        const revealTl = gsap.timeline();
+        revealTl
+          .to(".intro-logo #word1", { y: 220 }, "reveal")
+          .to(".intro-logo #word2", { y: -220 }, "reveal")
+          .to(".overlay > .block:first-child", { yPercent: -100, duration: 1.5, ease: "power2.inOut" }, "reveal")
+          .to(".overlay > .block:last-child", { yPercent: 100, duration: 1.5, ease: "power2.inOut" }, "reveal")
+          .fromTo(".hero-model",
+            { scale: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.inOut' },
+            "reveal"
+          )
+          .fromTo(".hero-content-line",
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: 'power3.out' },
+            "reveal+=0.5"
+          );
+      }, containerRef);
+      return () => ctx.revert();
+    }
+  }, [isLoaderDone, isModelReady]);
 
   return (
     <main ref={containerRef} className="relative w-full h-screen bg-black overflow-hidden text-white font-sans">
@@ -96,7 +94,7 @@ export default function HeroReveal() {
       </div>
 
       <div className="relative w-full h-full">
-				<HeroSection/>
+		<HeroSection onModelLoaded={() => setModelReady(true)} />
       </div>
     </main>
   );

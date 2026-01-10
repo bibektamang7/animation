@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const HeroSection = () => {
+const HeroSection = ({ onModelLoaded }: { onModelLoaded?: () => void }) => {
   const [caseAnimationProgress, setCaseAnimationProgress] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -58,15 +58,14 @@ const HeroSection = () => {
       <div className="container h-screen mx-auto px-4 relative z-10">
         <div className="h-full w-full flex items-center justify-center">
             <div ref={modelRef} className="hero-model absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-full h-full max-w-lg flex items-center justify-center">
                     <HeroModelScene
                     iPhonePath="/models/iphone_16_pro_max.glb"
                     scale={2.5}
                     autoRotate={true}
                     animationProgress={caseAnimationProgress}
                     className="w-full h-full"
+                    onLoad={onModelLoaded}
                     />
-                </div>
             </div>
             <div ref={contentRef} className="relative text-center z-10">
                 <p

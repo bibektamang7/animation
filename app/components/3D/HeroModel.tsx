@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
@@ -9,17 +9,25 @@ interface ModelProps {
   scale?: number;
   autoRotate?: boolean;
   animationProgress?: number;
+  onLoad?: () => void;
 }
 
 const HeroModel = ({
   iPhonePath,
   scale = 3,
-  animationProgress = 1
+  animationProgress = 1,
+  onLoad,
 }: ModelProps) => {
   const groupRef = useRef<THREE.Group>(null);
 
   // Load both models
   const { scene: iPhoneScene } = useGLTF(iPhonePath);
+
+  useEffect(() => {
+    if (onLoad) {
+      onLoad();
+    }
+  }, [onLoad]);
 
   // useFrame((state) => {
   //   if (groupRef.current && autoRotate) {
@@ -51,6 +59,7 @@ interface HeroModelSceneProps {
   autoRotate?: boolean;
   animationProgress?: number;
   className?: string;
+  onLoad?: () => void;
 }
 
 export const HeroModelScene = ({
@@ -58,7 +67,8 @@ export const HeroModelScene = ({
   scale = 2.5,
   autoRotate = true,
   animationProgress = 1,
-  className = ""
+  className = "",
+  onLoad,
 }: HeroModelSceneProps) => {
   return (
     <div className={`${className}`}>
@@ -83,6 +93,7 @@ export const HeroModelScene = ({
             iPhonePath={iPhonePath}
             scale={scale}
             animationProgress={animationProgress}
+            onLoad={onLoad}
           />
           <Environment preset="sunset" />
         </Suspense>
