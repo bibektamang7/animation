@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { CustomEase } from "gsap/dist/CustomEase";
 import HeroSection from "./sections/HeroSection";
+import HorizontalScrollSection from "./sections/HorizontalScrollSection";
+import FixedScene from "./3D/FixedSceneWrapper";
+import ProtectionStory from "./sections/ProtectionStory";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(CustomEase);
@@ -10,9 +13,32 @@ if (typeof window !== "undefined") {
 
 export default function HeroReveal() {
   const containerRef = useRef(null);
+  // proper callback ref pattern so children know when node is ready
+  const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null);
+  const startTriggerRef = useRef(null); // Ref for where standard scroll starts
+
+  // Create a stable callback for the ref
+  const scrollContainerRefCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (node !== null) {
+      setScrollContainer(node);
+    }
+  }, []);
+
   const [counter, setCounter] = useState(0);
   const [isLoaderDone, setLoaderDone] = useState(false);
   const [isModelReady, setModelReady] = useState(false);
+
+  // Failsafe: If model loading hangs or event is missed, force ready after 3s
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isModelReady) {
+        console.warn("Model loading timed out or event missed - forcing reveal");
+        setModelReady(true);
+      }
+    }, 3000); // 3 seconds max wait
+    return () => clearTimeout(timer);
+  }, [isModelReady]);
+
 
   // Loader timeline
   useEffect(() => {
@@ -23,11 +49,11 @@ export default function HeroReveal() {
       const tl = gsap.timeline({ onComplete: () => setLoaderDone(true) });
 
       tl.to(counterProxy, {
-          value: 100,
-          duration: 3,
-          ease: "none",
-          onUpdate: () => setCounter(Math.floor(counterProxy.value)),
-        })
+        value: 100,
+        duration: 3,
+        ease: "none",
+        onUpdate: () => setCounter(Math.floor(counterProxy.value)),
+      })
         .to(".counter-display", { y: -100, opacity: 0, delay: 0.2, duration: 0.8 })
         .to(".spinner", { opacity: 0, duration: 0.5 }, "-=0.5")
         .to(".intro-logo h1", { y: 0, stagger: 0.1 }, "-=0.2")
@@ -48,11 +74,8 @@ export default function HeroReveal() {
           .to(".intro-logo #word2", { y: -220 }, "reveal")
           .to(".overlay > .block:first-child", { yPercent: -100, duration: 1.5, ease: "power2.inOut" }, "reveal")
           .to(".overlay > .block:last-child", { yPercent: 100, duration: 1.5, ease: "power2.inOut" }, "reveal")
-          .fromTo(".hero-model",
-            { scale: 0, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.inOut' },
-            "reveal"
-          )
+          // We removed the .hero-model scale/opacity animation here because FixedScene handles it differently
+          // or we can add it back if we want an initial pop-in
           .fromTo(".hero-content-line",
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: 'power3.out' },
@@ -63,10 +86,16 @@ export default function HeroReveal() {
     }
   }, [isLoaderDone, isModelReady]);
 
+
+  // Animations are now handled in HorizontalScrollSection.tsx for perfect synchronization
+
+
+
   return (
-    <main ref={containerRef} className="relative w-full h-screen bg-black overflow-hidden text-white font-sans">
-      
-      <div className="loader fixed inset-0 z-20 flex flex-col items-center justify-center pointer-events-none">
+    <main ref={containerRef} className="relative w-full bg-black text-white font-sans">
+
+      {/* LOADER UI */}
+      <div className="loader fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
         <div className="overlay absolute inset-0 flex">
           <div className="block flex-1 bg-[#121212]"></div>
           <div className="block flex-1 bg-[#121212]"></div>
@@ -82,20 +111,33 @@ export default function HeroReveal() {
         </div>
 
         <div className="divider absolute z-100 w-px h-screen bg-white scale-y-0 origin-top"></div>
-        
+
         <div className="counter-display absolute overflow-hidden h-12 flex items-center justify-center">
-            <h1 className="text-4xl font-serif italic tracking-widest">
-                {counter}
-								{/* <span className="text-lg ml-1 opacity-50">%</span> */}
-            </h1>
+          <h1 className="text-4xl font-serif italic tracking-widest">
+            {counter}
+          </h1>
         </div>
 
         <div className="spinner relative z-10 mt-24 w-10 h-10 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
       </div>
 
-      <div className="relative w-full h-full">
-		<HeroSection onModelLoaded={() => setModelReady(true)} />
+      {/* Fixed Scene Background - z-index 1 */}
+      <div className="fixed-scene-container fixed inset-0 z-1 pointer-events-none">
+        <FixedScene
+          scrollContainer={scrollContainer}
+          onModelLoaded={() => setModelReady(true)}
+        />
       </div>
+
+      {/* Scrollable Content - z-index 10 */}
+      <div ref={scrollContainerRefCallback} className="relative z-10" style={{ position: 'relative' }}>
+        <HeroSection />
+        <HorizontalScrollSection />
+        <div className="protection-story-container fixed inset-0 z-20 translate-y-full bg-black">
+          <ProtectionStory />
+        </div>
+      </div>
+
     </main>
   );
 }

@@ -12,7 +12,7 @@ interface ModelProps {
   onLoad?: () => void;
 }
 
-const HeroModel = ({
+export const HeroModel = ({
   iPhonePath,
   scale = 3,
   onLoad,

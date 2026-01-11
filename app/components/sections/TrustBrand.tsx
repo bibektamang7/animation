@@ -51,6 +51,7 @@ const TrustBrand = () => {
     <section 
       ref={containerRef}
       className="w-full min-h-screen flex items-center justify-center relative bg-gradient-to-b from-surface to-background py-20"
+      style={{ position: 'relative' }}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
@@ -75,7 +76,7 @@ const TrustBrand = () => {
                 ease: "easeInOut"
               }}
             >
-              <iPhone3D />
+              <IPhone3D />
             </motion.div>
           </div>
           

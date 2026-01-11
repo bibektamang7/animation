@@ -50,6 +50,7 @@ const Lifestyle = () => {
     <section 
       ref={containerRef}
       className="w-full min-h-screen flex items-center justify-center relative bg-gradient-to-b from-background to-surface py-20"
+      style={{ position: 'relative' }}
     >
       <div className="absolute inset-0 overflow-hidden">
         {/* Parallax background elements */}

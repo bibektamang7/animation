@@ -1,14 +1,11 @@
 "use client";
-import { useState } from "react";
-import HeroSection from "./components/sections/HeroSection";
-import TransitionSection from "./components/sections/TransitionSection";
+import { useState, Suspense } from "react";
 import ProtectionStory from "./components/sections/ProtectionStory";
 import DesignStyle from "./components/sections/DesignStyle";
 import FitPrecision from "./components/sections/FitPrecision";
 import Lifestyle from "./components/sections/Lifestyle";
 import TrustBrand from "./components/sections/TrustBrand";
 import FinalCTA from "./components/sections/FinalCTA";
-import { Suspense } from "react";
 import HeroReveal from "./components/HeroReveal";
 
 export default function Home() {
@@ -24,10 +21,7 @@ export default function Home() {
         }
       >
         <HeroReveal/>
-        {/* <HeroSection />
-        <TransitionSection />
-        <ProtectionStory />
-        <DesignStyle />
+        {/* <DesignStyle />
         <FitPrecision />
         <Lifestyle />
         <TrustBrand />
