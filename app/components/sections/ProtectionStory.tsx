@@ -1,157 +1,134 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const IPhone3D = ({ className = "", hasCase = true }) => {
-  return (
-    <div className={`relative w-48 h-80 mx-auto ${className}`}>
-      {/* iPhone body */} <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl border-[6px] border-gray-800 flex flex-col items-center pt-6">
-        {/* Screen area */}
-        <div className="w-[90%] h-[90%] bg-gradient-to-b from-gray-900 to-black rounded-[30px] overflow-hidden relative">
-          {/* Camera notch */}
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-gray-900 rounded-b-lg flex justify-center items-center">
-            <div className="w-6 h-6 rounded-full bg-gray-800"></div>
-          </div>
-          
-          {/* Screen content */}
-          <div className="absolute inset-4 rounded-[20px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-            <div className="w-24 h-40 border border-gray-700 rounded-lg flex items-center justify-center">
-              <div className="text-gray-600 text-xs">iPhone</div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Case highlight if enabled */}
-        {hasCase && (
-          <div className="absolute top-0 left-0 w-full h-full rounded-[40px] shadow-[inset_0_0_20px_rgba(198,160,82,0.3)] pointer-events-none border-2 border-yellow-600/20"></div>
-        )}
-        
-        {/* Side buttons */}
-        <div className="absolute top-16 -left-[6px] w-1 h-10 bg-gray-800 rounded-l-lg"></div>
-        <div className="absolute top-28 -left-[6px] w-1 h-6 bg-gray-800 rounded-l-lg"></div>
-        <div className="absolute top-36 -right-[6px] w-1 h-10 bg-gray-800 rounded-r-lg"></div>
-      </div>
-    </div>
-  );
-};
+// Register plugin
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const features = [
+  {
+    id: 1,
+    title: "Shock-absorbing edges",
+    description: "Advanced TPU corners protect against drops from everyday heights.",
+  },
+  {
+    id: 2,
+    title: "Scratch-resistant",
+    description: "Premium materials resist everyday wear and maintain pristine look.",
+  },
+  {
+    id: 3,
+    title: "Everyday drop protection",
+    description: "Rigorously tested for real-world scenarios up to 6 feet.",
+  },
+];
 
 const ProtectionStory = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const [showDrop, setShowDrop] = useState(false);
-  
-  // Update showDrop based on scroll progress
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      if (latest > 0.2 && latest < 0.8) {
-        setShowDrop(true);
-      } else {
-        setShowDrop(false);
+    const ctx = gsap.context(() => {
+      // Animate main headline
+      const headline = sectionRef.current?.querySelector(".headline");
+      if (headline) {
+        gsap.fromTo(
+          headline,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
       }
-    });
-    
-    return () => unsubscribe();
-  }, [scrollYProgress]);
 
+      // Animate each feature row
+      featureRefs.current.forEach((feature, index) => {
+        if (!feature) return;
+
+        gsap.fromTo(
+          feature,
+          { y: 100, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: feature,
+              start: "top 85%", // Start animating when top of feature hits 85% from top
+              end: "top 50%",
+              scrub: 1, // Smooth scrubbed animation
+              // Optional: markers: true for debugging
+            },
+          }
+        );
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section 
-      ref={containerRef}
-      className="pt-60 bg-white text-black w-full min-h-screen flex items-center justify-center relative bg-gradient-to-b from-surface to-background py-20"
-      style={{ position: 'relative' }}
+    <section
+      ref={sectionRef}
+      className="pt-32 pb-24 bg-white text-black w-full relative min- h-screen"
     >
-      <div className="container mx-auto px-4">
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
+      <div className="container mx-auto px-4 max-w-6xl">
+        {/* Main headline */}
+        <div className="headline text-center mb-20">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6">
-            Built to <span className="text-gradient">protect</span> what matters
+            Built to <span className="text-blue-600">protect</span> what matters
           </h2>
-          
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Protection you forget is even there.
           </p>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <motion.div 
-            className="feature-card text-center p-6"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full bg-primary"></div>
-            </div>
-            <h3 className="text-xl font-medium mb-2">Shock-absorbing edges</h3>
-            <p className="text-muted-foreground">Advanced TPU corners protect against drops</p>
-          </motion.div>
-          
-          <motion.div 
-            className="feature-card text-center p-6"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full bg-primary"></div>
-            </div>
-            <h3 className="text-xl font-medium mb-2">Scratch-resistant</h3>
-            <p className="text-muted-foreground">Premium materials resist everyday wear</p>
-          </motion.div>
-          
-          <motion.div 
-            className="feature-card text-center p-6"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full bg-primary"></div>
-            </div>
-            <h3 className="text-xl font-medium mb-2">Everyday drop protection</h3>
-            <p className="text-muted-foreground">Tested for real-world scenarios</p>
-          </motion.div>
         </div>
-        
-        <div className="w-full h-96 md:h-[500px] relative mb-16 flex items-center justify-center">
-          <motion.div
-            animate={{
-              y: showDrop ? [0, 100, 0] : 0,
-              rotateX: showDrop ? [0, 20, 0] : 0
-            }}
-            transition={{
-              y: { duration: 0.5, times: [0, 0.5, 1] },
-              rotateX: { duration: 0.5 }
-            }}
-            className="w-full h-full flex items-center justify-center"
-          >
-            <IPhone3D hasCase={true} />
-          </motion.div>
+
+        {/* Feature List */}
+        <div className="relative w-full h-screen space-y-24">
+          {features.map((feature, index) => (
+            <div
+              key={feature.id}
+              ref={(el) => {
+                (featureRefs.current[index] = el)
+              }}
+              className="flex flex-col w-full lg:flex-row items-center gap-12"
+            >
+
+              <div className="lg:w-1/2 w-full h-64 md:h-80 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
+                <div className="text-gray-500 italic text-center px-4">
+                  Visual for: {feature.title}
+                </div>
+              </div>
+
+              <div className="lg:w-1/2 text-center lg:text-left space-y-4">
+                <h3 className="text-2xl md:text-3xl font-medium text-gray-900">
+                  {feature.title}
+                </h3>
+                <p className="text-lg text-gray-600">{feature.description}</p>
+              </div>
+
+            </div>
+          ))}
         </div>
-        
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-xl text-muted-foreground italic">
-            Watch how our case absorbs impact with innovative shock-absorbing technology.
+
+        {/* Bottom CTA */}
+        <div className="text-center mt-20">
+          <p className="text-xl text-gray-600 italic">
+            Engineered for confidence in every drop.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
