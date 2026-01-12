@@ -92,7 +92,7 @@ export default function HeroReveal() {
 
 
   return (
-    <main ref={containerRef} className="relative w-full bg-black text-white font-sans">
+    <main ref={containerRef} className={`relative w-full bg-black text-white font-sans `}>
 
       {/* LOADER UI */}
       <div className="loader fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
@@ -128,14 +128,13 @@ export default function HeroReveal() {
           onModelLoaded={() => setModelReady(true)}
         />
       </div>
-
-      {/* Scrollable Content - z-index 10 */}
-      <div ref={scrollContainerRefCallback} className="relative z-10" style={{ position: 'relative' }}>
+      <div
+        ref={scrollContainerRefCallback}
+        className="relative z-10 min-h-screen"
+        style={{ position: 'relative' }}
+      >
         <HeroSection />
         <HorizontalScrollSection />
-        <div className="protection-story-container fixed inset-0 z-20 translate-y-full bg-black">
-          <ProtectionStory />
-        </div>
       </div>
 
     </main>

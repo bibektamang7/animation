@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+
+/* .protection-story-container  */
+.protection-story-overlay {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.protection-story-overlay::-webkit-scrollbar {
+  display: none;             /* Chrome/Safari */
+}

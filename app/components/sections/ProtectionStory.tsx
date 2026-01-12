@@ -5,8 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 const IPhone3D = ({ className = "", hasCase = true }) => {
   return (
     <div className={`relative w-48 h-80 mx-auto ${className}`}>
-      {/* iPhone body */}
-      <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl border-[6px] border-gray-800 flex flex-col items-center pt-6">
+      {/* iPhone body */} <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl border-[6px] border-gray-800 flex flex-col items-center pt-6">
         {/* Screen area */}
         <div className="w-[90%] h-[90%] bg-gradient-to-b from-gray-900 to-black rounded-[30px] overflow-hidden relative">
           {/* Camera notch */}
@@ -58,10 +57,11 @@ const ProtectionStory = () => {
     return () => unsubscribe();
   }, [scrollYProgress]);
 
+
   return (
     <section 
       ref={containerRef}
-      className="pt-60 bg-white text-black  w-full min-h-screen flex items-center justify-center relative bg-gradient-to-b from-surface to-background py-20"
+      className="pt-60 bg-white text-black w-full min-h-screen flex items-center justify-center relative bg-gradient-to-b from-surface to-background py-20"
       style={{ position: 'relative' }}
     >
       <div className="container mx-auto px-4">
