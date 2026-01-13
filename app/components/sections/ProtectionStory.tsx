@@ -27,66 +27,47 @@ const features = [
 ];
 
 const ProtectionStory = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate main headline
-      const headline = sectionRef.current?.querySelector(".headline");
-      if (headline) {
-        gsap.fromTo(
-          headline,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
-      }
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-      // Animate each feature row
-      featureRefs.current.forEach((feature, index) => {
-        if (!feature) return;
+  const gallery = galleryRef.current;
+  const leftPanel = leftPanelRef.current;
 
-        gsap.fromTo(
-          feature,
-          { y: 100, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: feature,
-              start: "top 85%", // Start animating when top of feature hits 85% from top
-              end: "top 50%",
-              scrub: 1, // Smooth scrubbed animation
-              // Optional: markers: true for debugging
-            },
-          }
-        );
-      });
+  if (!gallery || !leftPanel) return;
+
+  // Ensure layout is ready
+  const ctx = gsap.context(() => {
+    ScrollTrigger.create({
+      trigger: gallery,
+      start: "top top",
+      end: () => `+=${gallery.scrollHeight}`,
+      pin: leftPanel,
+      pinSpacing: true, // keeps original space (usually default)
+      markers: true,
+      invalidateOnRefresh: true,
     });
+  });
 
-    return () => ctx.revert();
-  }, []);
+  // Critical: refresh after DOM is stable
+  const refreshTimer = setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 200);
+
+  return () => {
+    clearTimeout(refreshTimer);
+    ctx.revert();
+  };
+}, []);
 
   return (
     <section
-      ref={sectionRef}
-      className="pt-32 pb-24 bg-white text-black w-full relative min- h-screen"
+      className="pt-32 pb-24 bg-white text-black w-full min-h-screen"
     >
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Main headline */}
-        <div className="headline text-center mb-20">
+      <div className="relative container mx-auto px-4 max-w-6xl">
+        <div className="text-center mb-20">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6">
             Built to <span className="text-blue-600">protect</span> what matters
           </h2>
@@ -95,43 +76,38 @@ const ProtectionStory = () => {
           </p>
         </div>
 
-        {/* Feature List */}
-        <div className="relative w-full h-screen space-y-24">
-          {features.map((feature, index) => (
-            <div
-              key={feature.id}
-              ref={(el) => {
-                (featureRefs.current[index] = el)
-              }}
-              className="flex flex-col w-full lg:flex-row items-center gap-12"
-            >
+        <div
+          ref={galleryRef}
+          className="gallery flex justify-between min-h-[250vh]">
+          <div
 
-              <div className="lg:w-1/2 w-full h-64 md:h-80 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
-                <div className="text-gray-500 italic text-center px-4">
-                  Visual for: {feature.title}
+            ref={leftPanelRef}
+            className="left-panel absolute top-32 left-0w-1/2 pr-8">
+            <div className="w-full h-[80vh] rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
+              <div className="feature-content text-2xl font-bold">Feature Panel</div>
+            </div>
+          </div>
+          <div ref={galleryRef} className="absolute top-32 right-0 w-1/2 space-y-24">
+            {features.map((feature, index) => (
+              <div
+                key={feature.id}
+                className="w-full h-[80vh] flex flex-col lg:flex-row items-center gap-12"
+              >
+                <div className="content-holder w-full text-center space-y-4">
+                  <h3 className="text-2xl md:text-3xl font-medium text-gray-900">
+                    {feature.title}
+                  </h3>
+                  <p className="text-lg text-gray-600">{feature.description}</p>
                 </div>
               </div>
-
-              <div className="lg:w-1/2 text-center lg:text-left space-y-4">
-                <h3 className="text-2xl md:text-3xl font-medium text-gray-900">
-                  {feature.title}
-                </h3>
-                <p className="text-lg text-gray-600">{feature.description}</p>
-              </div>
-
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-20">
-          <p className="text-xl text-gray-600 italic">
-            Engineered for confidence in every drop.
-          </p>
-        </div>
       </div>
-    </section>
+    </section >
   );
 };
 
 export default ProtectionStory;
+
