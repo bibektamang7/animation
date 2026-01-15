@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;600&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @import "tailwindcss";
 
+.font-instrument { font-family: 'Instrument Serif', serif; }
+.font-raleway { font-family: 'Raleway', sans-serif; }
+.preserve-3d { transform-style: preserve-3d; }
 
 /* .protection-story-container  */
 .protection-story-overlay {
@@ -8,4 +13,142 @@
 }
 .protection-story-overlay::-webkit-scrollbar {
   display: none;             /* Chrome/Safari */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.unknown{
+    margin: 0;
+    background: #fff;
+     font-family: "Space Grotesk", sans-serif;
+}
+
+.spacer {
+    width: 100%;
+    height: 50vh;
+    background: #373737;
+}
+
+.spacer>div {
+    color: #fff;
+    font-weight: 900;
+    font-size: 99px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+}
+
+.headline {
+    border-radius: 6px;
+    width: 100%;
+    font-size: 54px;
+}
+
+.text {
+    margin: 0.8em 0 0 0;
+    border-radius: 6px;
+    height: 1em;
+    width: 100%;
+}
+
+.gallery {
+    display: flex;
+    box-sizing: border-box;
+    background: #f8e6ef;
+}
+
+.left {
+    width: 50%;
+}
+
+.detailsWrapper {
+    margin: auto;
+    width: 80%;
+}
+
+.details {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right {
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.photos {
+    width: 40vw;
+    height: 40vw;
+    background: transparent;
+    position: relative;
+}
+
+.photos-box {
+    overflow: hidden;
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    border-radius: 20px;
+}
+
+.photo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.photo img {
+    float: left;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+@media all and (max-width: 640px) {
+    .gallery {
+        position: relative;
+    }
+
+    .left {
+        width: 100%;
+    }
+
+    .right {
+        width: 100%;
+        position: absolute;
+    }
+
+    .photos {
+        position: absolute;
+        width: 100%;
+        height: 50vh;
+        bottom: 0px;
+    }
+
+    .photos-box {
+        width: 90%;
+        height: 90%;
+        top: 0%;
+        left: 5%;
+        bottom: 5%;
+    }
+
+    .details {
+        justify-content: start;
+        margin-top: 90px;
+    }
 }

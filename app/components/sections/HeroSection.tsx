@@ -11,48 +11,49 @@ import { useRef } from "react";
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  
+
 
   return (
-    <section ref={heroRef} className="w-full h-screen section-container relative overflow-hidden bg-transparent">
-        {/* Gradients and Backgrounds handled by parent or transparent */}
-      
+    <section ref={heroRef} className="relative w-full h-screen section-container relative overflow-hidden bg-transparent">
+      {/* Gradients and Backgrounds handled by parent or transparent */}
+
+
       <div className="container h-screen mx-auto px-4 relative z-10 pointer-events-none">
         <div className="h-full w-full flex items-center justify-center">
-            {/* 3D Model is now in FixedScene, acting as background */}
-            
-            <div className="relative text-center z-10 pointer-events-auto">
-                <p
-                className="hero-content-line text-primary tracking-[0.3em] uppercase text-sm mb-4"
-                >
-                Covermandu
-                </p>
+          {/* 3D Model is now in FixedScene, acting as background */}
 
-                <h1
-                className="hero-content-line text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight mb-6"
-                >
-                Designed to protect.
-                <br />
-                <span className="text-gradient font-medium">Styled to stand out.</span>
-                </h1>
+          <div className="relative text-center z-10 pointer-events-auto">
+            <p
+              className="hero-content-line text-primary tracking-[0.3em] uppercase text-sm mb-4"
+            >
+              Covermandu
+            </p>
 
-                <p
-                className="hero-content-line text-lg md:text-xl text-muted-foreground max-w-md mx-auto mb-8"
-                >
-                Premium iPhone cases built for everyday life.
-                </p>
+            <h1
+              className="hero-content-line text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight mb-6"
+            >
+              Designed to protect.
+              <br />
+              <span className="text-gradient font-medium">Styled to stand out.</span>
+            </h1>
 
-                <div className="hero-content-line">
-                <button
-                    className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium overflow-hidden btn-glow"
-                >
-                    <span className="relative z-10">Visit store</span>
-                    <div
-                    className="absolute inset-0 bg-linear-to-r from-gold-light to-gold-dark"
-                    />
-                </button>
-                </div>
+            <p
+              className="hero-content-line text-lg md:text-xl text-muted-foreground max-w-md mx-auto mb-8"
+            >
+              Premium iPhone cases built for everyday life.
+            </p>
+
+            <div className="hero-content-line">
+              <button
+                className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium overflow-hidden btn-glow"
+              >
+                <span className="relative z-10">Visit store</span>
+                <div
+                  className="absolute inset-0 bg-linear-to-r from-gold-light to-gold-dark"
+                />
+              </button>
             </div>
+          </div>
         </div>
       </div>
 

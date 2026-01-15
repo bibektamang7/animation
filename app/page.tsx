@@ -7,10 +7,11 @@ import Lifestyle from "./components/sections/Lifestyle";
 import TrustBrand from "./components/sections/TrustBrand";
 import FinalCTA from "./components/sections/FinalCTA";
 import HeroReveal from "./components/HeroReveal";
+import ImageFlowAnimation from "./components/sections/ImageFlowAnimation";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  
+
   return (
     <main className="w-full bg-background text-foreground overflow-x-hidden">
       <Suspense
@@ -20,7 +21,9 @@ export default function Home() {
           </div>
         }
       >
-        <HeroReveal/>
+        {/* <HeroReveal /> */}
+        <ImageFlowAnimation />
+        {/* <ProtectionStory /> */}
         {/* <DesignStyle />
         <FitPrecision />
         <Lifestyle />

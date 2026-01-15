@@ -74,7 +74,6 @@ export default function HorizontalScrollSection() {
         </h2>
       </div>
 
-      {/* 👇 ABSOLUTE PROTECTION STORY — starts hidden BELOW */}
       <div
         ref={protectionRef}
         className="absolute bottom-0 left-0 w-full z-10 bg-white text-black"

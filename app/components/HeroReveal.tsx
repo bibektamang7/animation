@@ -13,11 +13,9 @@ if (typeof window !== "undefined") {
 
 export default function HeroReveal() {
   const containerRef = useRef(null);
-  // proper callback ref pattern so children know when node is ready
   const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null);
   const startTriggerRef = useRef(null); // Ref for where standard scroll starts
 
-  // Create a stable callback for the ref
   const scrollContainerRefCallback = React.useCallback((node: HTMLDivElement | null) => {
     if (node !== null) {
       setScrollContainer(node);
@@ -28,7 +26,6 @@ export default function HeroReveal() {
   const [isLoaderDone, setLoaderDone] = useState(false);
   const [isModelReady, setModelReady] = useState(false);
 
-  // Failsafe: If model loading hangs or event is missed, force ready after 3s
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!isModelReady) {
@@ -64,7 +61,6 @@ export default function HeroReveal() {
     return () => ctx.revert();
   }, []);
 
-  // Reveal timeline
   useEffect(() => {
     if (isLoaderDone && isModelReady) {
       const ctx = gsap.context(() => {
@@ -74,8 +70,6 @@ export default function HeroReveal() {
           .to(".intro-logo #word2", { y: -220 }, "reveal")
           .to(".overlay > .block:first-child", { yPercent: -100, duration: 1.5, ease: "power2.inOut" }, "reveal")
           .to(".overlay > .block:last-child", { yPercent: 100, duration: 1.5, ease: "power2.inOut" }, "reveal")
-          // We removed the .hero-model scale/opacity animation here because FixedScene handles it differently
-          // or we can add it back if we want an initial pop-in
           .fromTo(".hero-content-line",
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: 'power3.out' },
@@ -122,7 +116,7 @@ export default function HeroReveal() {
       </div>
 
       {/* Fixed Scene Background - z-index 1 */}
-      <div className="fixed-scene-container fixed inset-0 z-1 pointer-events-none">
+      <div className="absolute inset-0 z-1 pointer-events-none">
         <FixedScene
           scrollContainer={scrollContainer}
           onModelLoaded={() => setModelReady(true)}
@@ -134,7 +128,7 @@ export default function HeroReveal() {
         style={{ position: 'relative' }}
       >
         <HeroSection />
-        <HorizontalScrollSection />
+        {/* <HorizontalScrollSection /> */}
       </div>
 
     </main>
