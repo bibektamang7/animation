@@ -136,16 +136,6 @@ export default function ImageFlowAnimation() {
 
 	return (
 		<div className="min-h-screen bg-[#e9e9e9] overflow-x-hidden font-sans">
-			<section className="h-screen w-full flex items-center justify-center relative bg-[#e9e9e9]">
-				<div className="text-center pointer-events-none z-10 font-raleway">
-					<h1 className="font-extralight tracking-[0.3em] uppercase text-5xl md:text-8xl bg-gradient-to-br from-[#1c1c1c] to-[#4a4a4a] bg-clip-text text-transparent">
-						Begin
-					</h1>
-					<p className="mt-4 font-light tracking-[0.15em] text-xs md:text-sm opacity-70 text-[#1c1c1c]">
-						Scroll to explore the journey
-					</p>
-				</div>
-			</section>
 
 			<section ref={flowRef} className="h-screen w-full bg-[#111] relative overflow-hidden">
 				<div className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none text-white/20 text-center font-instrument px-6">

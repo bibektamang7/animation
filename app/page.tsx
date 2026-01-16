@@ -8,6 +8,7 @@ import TrustBrand from "./components/sections/TrustBrand";
 import FinalCTA from "./components/sections/FinalCTA";
 import HeroReveal from "./components/HeroReveal";
 import ImageFlowAnimation from "./components/sections/ImageFlowAnimation";
+import Hero from "./components/Hero";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,7 @@ export default function Home() {
           </div>
         }
       >
-        {/* <HeroReveal /> */}
+        <Hero />
         <ImageFlowAnimation />
         {/* <ProtectionStory /> */}
         {/* <DesignStyle />
