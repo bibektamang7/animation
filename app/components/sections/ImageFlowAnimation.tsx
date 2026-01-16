@@ -4,12 +4,6 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import React, { useEffect, useRef, useState } from 'react';
 
-/**
- * Image Flow Component
- * A robust React implementation of a 3D Z-axis image scroll gallery.
- * Fixed: Ensuring the last image perfectly covers the viewport at the end of scroll.
- */
-
 const IMAGES = [
 	"https://i.pinimg.com/1200x/6d/c1/51/6dc151fccad84848851615bf7fd5273e.jpg",
 	"https://i.pinimg.com/736x/86/5b/37/865b37c273ce08ccba905cfd5c43f7fd.jpg",
@@ -41,7 +35,6 @@ const IMAGES = [
 	"https://i.pinimg.com/1200x/38/26/e4/3826e4c2a4cad3165d852d2ccbf078ed.jpg"
 ];
 
-// Positions distributed across 3D space
 const POSITIONS = [
 	{ x: -0.8, y: -0.6 }, { x: 0.7, y: 0.4 }, { x: -0.5, y: 0.7 },
 	{ x: 0.6, y: -0.5 }, { x: -0.8, y: 0.2 }, { x: 0.8, y: -0.3 },
@@ -52,12 +45,13 @@ const POSITIONS = [
 	{ x: -0.6, y: 0.6 }, { x: 0.8, y: 0.5 }, { x: -0.3, y: -0.5 },
 	{ x: 0.5, y: 0.3 }, { x: -0.7, y: -0.2 }, { x: 0.2, y: 0.7 },
 	{ x: -0.4, y: 0.8 }, { x: 0.6, y: -0.8 }, { x: -0.8, y: 0.1 },
-	{ x: 0, y: 0 } // Last one centered
+	{ x: 0, y: 0 }
 ];
 
 export default function ImageFlowAnimation() {
 	const flowRef = useRef<HTMLDivElement>(null);
 	const imagesRef = useRef<(HTMLDivElement | null)[]>([]);
+	const textRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		gsap.registerPlugin(ScrollTrigger);
@@ -84,7 +78,7 @@ export default function ImageFlowAnimation() {
 			return {
 				x: isLast ? 0 : POSITIONS[index].x * screenWidth * spread,
 				y: isLast ? 0 : POSITIONS[index].y * screenHeight * spread,
-				z: 1500, // Move past the camera
+				z: 1500,
 				scale: isLast ? 1 : 1.5,
 				opacity: 1
 			};
@@ -95,11 +89,20 @@ export default function ImageFlowAnimation() {
 		const st = ScrollTrigger.create({
 			trigger: flowRef.current,
 			start: "top top",
-			end: `+=${screenHeight * 6}px`, // Adjusted for better feel
+			end: `+=${screenHeight * 6}px`,
 			pin: true,
 			scrub: 1.5,
 			onUpdate: (self: any) => {
 				const progress = self.progress;
+
+				// Fade out the main text as we progress
+				if (textRef.current) {
+					const fadeStart = 0.7;
+					const fadeEnd = 0.9;
+					const textOpacity = 1 - Math.max(0, Math.min(1, (progress - fadeStart) / (fadeEnd - fadeStart)));
+					gsap.set(textRef.current, { opacity: textOpacity });
+				}
+
 				images.forEach((img, index) => {
 					const isLast = index === images.length - 1;
 
@@ -119,7 +122,7 @@ export default function ImageFlowAnimation() {
 						z = gsap.utils.interpolate(-800, 0, imgProgress);
 						scale = gsap.utils.interpolate(0.5, 1, imgProgress);
 						x = 0; y = 0;
-						opacity = imgProgress; // Gradual fade in
+						opacity = imgProgress;
 					}
 
 					gsap.set(img, { x, y, z, scale, opacity });
@@ -138,7 +141,7 @@ export default function ImageFlowAnimation() {
 		<div className="min-h-screen bg-[#e9e9e9] overflow-x-hidden font-sans">
 
 			<section ref={flowRef} className="h-screen w-full bg-[#111] relative overflow-hidden">
-				<div className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none text-white/20 text-center font-instrument px-6">
+				<div ref={textRef} className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none text-white/20 text-center font-instrument px-6">
 					<p className="text-4xl md:text-7xl lg:text-9xl tracking-tighter italic">
 						Covermandu
 					</p>
@@ -158,8 +161,8 @@ export default function ImageFlowAnimation() {
 								<img src={src} alt="" className="w-full h-full object-cover" />
 								{isLast && (
 									<div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white font-instrument p-12 text-center">
-										<h2 className="text-4xl md:text-7xl mb-4 italic">The Destination</h2>
-										<p className="font-raleway tracking-widest text-xs uppercase opacity-80">Full View Reached</p>
+										<h2 className="text-4xl md:text-8xl mb-4 italic">Feel the Difference</h2>
+										<p className="font-raleway tracking-widest text-xs uppercase opacity-100">Best in the Town</p>
 									</div>
 								)}
 							</div>
