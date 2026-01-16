@@ -138,7 +138,7 @@ export default function ImageFlowAnimation() {
 	}, []);
 
 	return (
-		<div className="min-h-screen bg-[#e9e9e9] overflow-x-hidden font-sans">
+		<div className="relative min-h-screen bg-[#e9e9e9] overflow-x-hidden font-sans">
 
 			<section ref={flowRef} className="h-screen w-full bg-[#111] relative overflow-hidden">
 				<div ref={textRef} className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none text-white/20 text-center font-instrument px-6">
@@ -168,17 +168,6 @@ export default function ImageFlowAnimation() {
 							</div>
 						);
 					})}
-				</div>
-			</section>
-
-			<section className="h-screen w-full flex items-center justify-center relative bg-white">
-				<div className="text-center pointer-events-none z-10 font-raleway">
-					<h1 className="font-extralight tracking-[0.3em] uppercase text-5xl md:text-8xl text-black">
-						The End
-					</h1>
-					<p className="mt-4 font-light tracking-[0.15em] text-xs md:text-sm opacity-50 text-black">
-						Reflecting on the visual path
-					</p>
 				</div>
 			</section>
 		</div>
